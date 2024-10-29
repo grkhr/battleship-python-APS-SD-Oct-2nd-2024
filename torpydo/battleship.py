@@ -56,8 +56,10 @@ def start_game():
     \    \_/
      """"""""''' + Style.RESET_ALL)
 
+    n = 0
     while True:
-        print()
+        n += 1
+        print('----- Round', n, '------')
         print("Player, it's your turn")
         position = parse_position(input("Enter coordinates for your shot :"))
         is_hit = GameController.check_is_hit(enemyFleet, position)
@@ -77,7 +79,7 @@ def start_game():
 
         position = get_random_position()
         is_hit = GameController.check_is_hit(myFleet, position)
-        print()
+        print('---')
         print(f"Computer shoot in {str(position)} and {Fore.RED + 'hit your ship!' if is_hit else Fore.GREEN + 'miss'}" + Style.RESET_ALL)
         TelemetryClient.trackEvent('Computer_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
         if is_hit:
@@ -90,6 +92,7 @@ def start_game():
             -   (\- |  \ /  |  /)  -
                  -\  \     /  /-
                    \  \   /  /''' + Style.RESET_ALL)
+        print('\n')
 
 def parse_position(input: str):
     letter = Letter[input.upper()[:1]]
