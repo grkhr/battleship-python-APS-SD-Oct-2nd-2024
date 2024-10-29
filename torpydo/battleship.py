@@ -85,10 +85,11 @@ def start_game():
                 print("Still alive: ", e.name)
 
 
-        print("Yeah ! Nice hit !, You hit: " if is_hit else "Miss")
-        print(ship.name if is_hit else "")
 
-        print(Fore.GREEN + "Yeah ! Nice hit !" + Style.RESET_ALL if is_hit else Fore.YELLOW + "Miss"+ Style.RESET_ALL)
+
+
+        print(Fore.GREEN + "Yeah ! Nice hit ! " + ship.name + Style.RESET_ALL if is_hit else Fore.YELLOW + "Miss"+ Style.RESET_ALL)
+
         TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
 
         position = get_random_position()
