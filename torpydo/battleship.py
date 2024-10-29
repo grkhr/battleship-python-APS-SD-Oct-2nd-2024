@@ -64,7 +64,6 @@ def start_game():
         if not position_valid(position):
             print(Fore.RED + f"!!! Invalid position {position.column.name}{position.row}, try again\n" + Style.RESET_ALL)
             continue
-        is_hit = GameController.check_is_hit(enemyFleet, position)
         is_hit, ship = GameController.check_is_hit(enemyFleet, position)
         if is_hit:
             print(Fore.GREEN + r'''
@@ -108,6 +107,29 @@ def start_game():
                  -\  \     /  /-
                    \  \   /  /''' + Style.RESET_ALL)
         print('\n')
+
+        killed = 0
+        for f in enemyFleet:
+            if f.hp <= 0:
+                killed += 1
+                continue
+        print("killed:", killed)
+        if killed == len(enemyFleet):
+            print("All enemies ships were destroyed! You win!")
+            return
+
+        killed = 0
+        for f in myFleet:
+            if f.hp <= 0:
+                killed +=1
+                continue
+        
+        if killed == len(myFleet):
+            print("All your ships were destroyed. You lose")
+            return
+                
+            
+
         n += 1
 
 def parse_position(input: str):
