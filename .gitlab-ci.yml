@@ -1,0 +1,50 @@
+image: python:3.10
+
+stages: 
+  - unit-test
+  - acceptance-test
+  - analysis
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
+
+cache: 
+  paths: 
+    - .cache/pip
+    - venv
+
+unit test:
+  stage: unit-test
+  before_script:
+  - python -V
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+  script:
+  - nose2 -v --with-coverage --coverage ./torpydo --coverage-report xml --junit-xml --junit-xml-path nosetests.xml
+  artifacts:
+    paths: 
+      - nosetests.xml
+      - coverage.xml
+    expire_in: 1 week
+    reports:
+      junit: nosetests.xml
+
+acceptance test: 
+  stage: acceptance-test
+  before_script:
+  - python -V
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+  script: 
+  - behave
+
+sonar:
+  stage: analysis
+  image: sonarsource/sonar-scanner-cli
+  script:
+  - sonar-scanner -X -Dsonar.host.url=$SONAR_URL -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.login=$SONAR_PROJECT_TOKEN -Dsonar.sources=torpydo,tests,features -Dsonar.python.xunit.reportPath=nosetests.xml -Dsonar.python.coverage.reportPaths=coverage.xml
+
