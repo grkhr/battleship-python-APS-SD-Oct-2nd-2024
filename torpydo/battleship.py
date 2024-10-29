@@ -44,7 +44,7 @@ def start_game():
     else:
         cmd='clear'   
     os.system(cmd)
-    print(r'''
+    print(Fore.CYAN + r'''
                   __
                  /  \
            .-.  |    |
@@ -54,15 +54,19 @@ def start_game():
    |      _  /
    |     /_\
     \    \_/
-     """"""""''')
+     """"""""''' + Style.RESET_ALL)
 
+    n = 1
     while True:
-        print()
+        print('----- Round', n, '------')
         print("Player, it's your turn")
         position = parse_position(input("Enter coordinates for your shot :"))
+        if not position_valid(position):
+            print(Fore.RED + f"!!! Invalid position {position.column.name}{position.row}, try again\n" + Style.RESET_ALL)
+            continue 
         is_hit = GameController.check_is_hit(enemyFleet, position)
         if is_hit:
-            print(r'''
+            print(Fore.GREEN + r'''
                 \          .  ./
               \   .:"";'.:..""   /
                  (M^^.^~~:.'"").
@@ -70,18 +74,18 @@ def start_game():
                ((| :. ~ ^  :. .|))
             -   (\- |  \ /  |  /)  -
                  -\  \     /  /-
-                   \  \   /  /''')
+                   \  \   /  /''' + Style.RESET_ALL)
 
-        print("Yeah ! Nice hit !" if is_hit else "Miss")
+        print(Fore.GREEN + "Yeah ! Nice hit !" + Style.RESET_ALL if is_hit else Fore.YELLOW + "Miss"+ Style.RESET_ALL)
         TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
 
         position = get_random_position()
         is_hit = GameController.check_is_hit(myFleet, position)
-        print()
-        print(f"Computer shoot in {str(position)} and {'hit your ship!' if is_hit else 'miss'}")
+        print('---')
+        print(f"Computer shoot in {str(position)} and {Fore.RED + 'hit your ship!' if is_hit else Fore.GREEN + 'miss'}" + Style.RESET_ALL)
         TelemetryClient.trackEvent('Computer_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
         if is_hit:
-            print(r'''
+            print(Fore.RED + r'''
                 \          .  ./
               \   .:"";'.:..""   /
                  (M^^.^~~:.'"").
@@ -89,7 +93,9 @@ def start_game():
                ((| :. ~ ^  :. .|))
             -   (\- |  \ /  |  /)  -
                  -\  \     /  /-
-                   \  \   /  /''')
+                   \  \   /  /''' + Style.RESET_ALL)
+        print('\n')
+        n += 1
 
 def parse_position(input: str):
     letter = Letter[input.upper()[:1]]
@@ -97,6 +103,9 @@ def parse_position(input: str):
     position = Position(letter, number)
 
     return Position(letter, number)
+
+def position_valid(obj: Position):
+    return obj.column in Letter and obj.row >= 1 and obj.row <= 8
 
 def get_random_position():
     rows = 8

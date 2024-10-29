@@ -27,6 +27,7 @@ class Position(object):
 
     def __str__(self):
         return f"{self.column.name}{self.row}"
+    
 
     __repr__ = __str__
 
