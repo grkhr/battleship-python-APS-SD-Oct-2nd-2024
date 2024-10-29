@@ -63,7 +63,7 @@ def start_game():
         position = parse_position(input("Enter coordinates for your shot :"))
         if not position_valid(position):
             print(Fore.RED + f"!!! Invalid position {position.column.name}{position.row}, try again\n" + Style.RESET_ALL)
-            continue
+            continue 
         is_hit = GameController.check_is_hit(enemyFleet, position)
         if is_hit:
             print(Fore.GREEN + r'''
