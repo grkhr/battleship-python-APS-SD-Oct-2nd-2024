@@ -35,6 +35,7 @@ class Ship(object):
     def __init__(self, name: str, size: int, color: Color):
         self.name = name
         self.size = size
+        self.hp = size
         self.color = color
         self.positions = []
 

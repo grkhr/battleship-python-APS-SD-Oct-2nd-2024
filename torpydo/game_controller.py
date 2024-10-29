@@ -12,10 +12,12 @@ class GameController(object):
 
         for ship in ships:
             for position in ship.positions:
-                if position == shot:
-                    return True
+                if position == shot and ship.hp > 0:
+                    ship.hp = ship.hp - 1
+                    return True, ship
 
-        return False
+
+        return False, None
 
     def initialize_ships():
         return [

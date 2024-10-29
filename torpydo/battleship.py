@@ -63,8 +63,9 @@ def start_game():
         position = parse_position(input("Enter coordinates for your shot :"))
         if not position_valid(position):
             print(Fore.RED + f"!!! Invalid position {position.column.name}{position.row}, try again\n" + Style.RESET_ALL)
-            continue 
+            continue
         is_hit = GameController.check_is_hit(enemyFleet, position)
+        is_hit, ship = GameController.check_is_hit(enemyFleet, position)
         if is_hit:
             print(Fore.GREEN + r'''
                 \          .  ./
@@ -75,6 +76,17 @@ def start_game():
             -   (\- |  \ /  |  /)  -
                  -\  \     /  /-
                    \  \   /  /''' + Style.RESET_ALL)
+
+        for e in enemyFleet:
+            if e.hp == 0:
+                print("You killed: ", e.name, e.positions)
+
+            else:
+                print("Still alive: ", e.name)
+
+
+        print("Yeah ! Nice hit !, You hit: " if is_hit else "Miss")
+        print(ship.name if is_hit else "")
 
         print(Fore.GREEN + "Yeah ! Nice hit !" + Style.RESET_ALL if is_hit else Fore.YELLOW + "Miss"+ Style.RESET_ALL)
         TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
