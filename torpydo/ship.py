@@ -50,3 +50,5 @@ class Ship(object):
         return f"{self.color.name} {self.name} ({self.size}): {self.positions}"
 
     __repr__ = __str__
+
+        
