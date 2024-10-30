@@ -40,11 +40,14 @@ class Ship(object):
         self.positions = []
 
     def add_position(self, input: str):
-        letter = Letter[input.upper()[:1]]
-        number = int(input[1:])
-        position = Position(letter, number)
+        try:
 
-        self.positions.append(Position(letter, number))
+            letter = Letter[input.upper()[:1]]
+            number = int(input[1:])
+            position = Position(letter, number)
+            self.positions.append(Position(letter, number))
+        except:
+            return -1
 
     def __str__(self):
         return f"{self.color.name} {self.name} ({self.size}): {self.positions}"
